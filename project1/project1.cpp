@@ -82,13 +82,13 @@ bool accrueInterest
    if(numMonths<0)
    {
       cout<<"ERROR in accrueInterest: numMonths must be > 0,";
-      cout<<"but the value "<<numMonths<<" was provided!";
+      cout<<"but the value "<<numMonths<<" was provided!"<<endl;
       cout<<"Sorry, an error was detected.  Unable to provide results!"<<endl;
       return false;
    }
    double initialBalance = balanceAmt;
    // Call accrueOneMonthsInterest function in the loop
-   // for calculate the accumulated interest.
+   // for calculating the accumulated interest.
    for(int i = 0; i < numMonths; i++)
    {
       accrueOneMonthsInterest(balanceAmt,doPrintEachMonth);

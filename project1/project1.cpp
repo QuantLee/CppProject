@@ -43,13 +43,16 @@ int main()
    int numMonths;
    bool doPrintEachMonth;
    char yesOrNo;
+   bool success;
+
    cout<<"Enter the initial balance of the account: ";
    cin>>balanceAmt;
    cout<<"Enter the number of months to accrue interest: ";
    cin>>numMonths;
    cout<<"Show month-by-month results - 'y' for yes, any other for no: ";
    cin>>yesOrNo;
-
+   //keep a record of initial balance
+   double initialBalance = balanceAmt;
    //If doPrintEachMonth is false, the function performs silently, but if true,
    //the amount of interest added each month, along with the balance after that
    //month, will be printed.
@@ -61,8 +64,14 @@ int main()
    {
       doPrintEachMonth = false;
    }
-
-   accrueInterest(balanceAmt,numMonths,doPrintEachMonth);
+   success = accrueInterest(balanceAmt,numMonths,doPrintEachMonth);
+   if(success)
+   {
+      cout<<"Interest accrued for "<<numMonths<<" months!"<<endl<<endl;
+      cout<<"Initial balance: "<<initialBalance<<endl;
+      cout<<"Total interest accrued: "<<balanceAmt - initialBalance<<endl;
+      cout<<"Final balance: "<<balanceAmt<<endl;
+   }
 };
 
 
@@ -86,17 +95,12 @@ bool accrueInterest
       cout<<"Sorry, an error was detected.  Unable to provide results!"<<endl;
       return false;
    }
-   double initialBalance = balanceAmt;
    // Call accrueOneMonthsInterest function in the loop
    // for calculating the accumulated interest.
    for(int i = 0; i < numMonths; i++)
    {
       accrueOneMonthsInterest(balanceAmt,doPrintEachMonth);
    }
-   cout<<"Interest accrued for "<<numMonths<<" months!"<<endl<<endl;
-   cout<<"Initial balance: "<<initialBalance<<endl;
-   cout<<"Total interest accrued: "<<balanceAmt - initialBalance<<endl;
-   cout<<"Final balance: "<<balanceAmt<<endl;
    return true;
 }
 

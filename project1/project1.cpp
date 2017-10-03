@@ -45,12 +45,12 @@ int main()
    char yesOrNo;
    bool success;
 
-   cout<<"Enter the initial balance of the account: ";
-   cin>>balanceAmt;
-   cout<<"Enter the number of months to accrue interest: ";
-   cin>>numMonths;
-   cout<<"Show month-by-month results - 'y' for yes, any other for no: ";
-   cin>>yesOrNo;
+   cout << "Enter the initial balance of the account: ";
+   cin >> balanceAmt;
+   cout << "Enter the number of months to accrue interest: ";
+   cin >> numMonths;
+   cout << "Show month-by-month results - 'y' for yes, any other for no: ";
+   cin >> yesOrNo;
    //keep a record of initial balance
    double initialBalance = balanceAmt;
    //If doPrintEachMonth is false, the function performs silently, but if true,
@@ -64,13 +64,13 @@ int main()
    {
       doPrintEachMonth = false;
    }
-   success = accrueInterest(balanceAmt,numMonths,doPrintEachMonth);
+   success = accrueInterest(balanceAmt, numMonths, doPrintEachMonth);
    if(success)
    {
-      cout<<"Interest accrued for "<<numMonths<<" months!"<<endl<<endl;
-      cout<<"Initial balance: "<<initialBalance<<endl;
-      cout<<"Total interest accrued: "<<balanceAmt - initialBalance<<endl;
-      cout<<"Final balance: "<<balanceAmt<<endl;
+      cout << "Interest accrued for " << numMonths << " months!" << endl << endl;
+      cout << "Initial balance: " << initialBalance << endl;
+      cout << "Total interest accrued: " << balanceAmt - initialBalance << endl;
+      cout << "Final balance: " << balanceAmt << endl;
    }
 };
 
@@ -83,23 +83,23 @@ bool accrueInterest
 )
 {
    //Test the if the input is legal
-   if(balanceAmt<0)
+   if(balanceAmt < 0)
    {
-      accrueOneMonthsInterest(balanceAmt,doPrintEachMonth);
+      accrueOneMonthsInterest(balanceAmt, doPrintEachMonth);
       return false;
    }
-   if(numMonths<0)
+   if(numMonths <  0)
    {
-      cout<<"ERROR in accrueInterest: numMonths must be > 0,";
-      cout<<"but the value "<<numMonths<<" was provided!"<<endl;
-      cout<<"Sorry, an error was detected.  Unable to provide results!"<<endl;
+      cout << "ERROR in accrueInterest: numMonths must be > 0, ";
+      cout << "but the value " << numMonths << " was provided!" << endl;
+      cout << "Sorry, an error was detected.  Unable to provide results!" << endl;
       return false;
    }
    // Call accrueOneMonthsInterest function in the loop
    // for calculating the accumulated interest.
    for(int i = 0; i < numMonths; i++)
    {
-      accrueOneMonthsInterest(balanceAmt,doPrintEachMonth);
+      accrueOneMonthsInterest(balanceAmt, doPrintEachMonth);
    }
    return true;
 }
@@ -117,9 +117,9 @@ bool accrueOneMonthsInterest
    //Test the if the input is legal
    if(balanceAmt < 0)
    {
-      cout<<"ERROR in accrueOneMonthsInterest: balanceAmt must be >= 0, ";
-      cout<<"but the value "<< balanceAmt<<" was provided!"<<endl;
-      cout<<"Sorry, an error was detected.  Unable to provide results!"<<endl;
+      cout << "ERROR in accrueOneMonthsInterest: balanceAmt must be >= 0, ";
+      cout << "but the value " << balanceAmt << " was provided!"<< endl;
+      cout << "Sorry, an error was detected.  Unable to provide results!" << endl;
       return false;
    }
    //Customer balances under $1000.00 (exclusive) will be given a monthly
@@ -127,11 +127,13 @@ bool accrueOneMonthsInterest
    //be given a monthly interest rate of 0.4%, Other balances (i.e. between
    //$1000.00 (inclusive) and $15000.00 (exclusive)) will be given a monthly
    //interest rate of 0.225%.
-   if(balanceAmt < 1000.00)
+   float lowAmount = 1000.00;
+   float highAmout = 15000.00;
+   if(balanceAmt < lowAmount)
    {
       interestRate = 0.0015;
    }
-   else if(balanceAmt >= 15000.00)
+   else if(balanceAmt >= highAmout)
    {
       interestRate = 0.004;
    }
@@ -143,13 +145,13 @@ bool accrueOneMonthsInterest
    interestAmt = balanceAmt * interestRate;
    balanceAmt = balanceAmt + interestAmt;
    // Specify the optional print out
-   if(doPrintInfo == true)
+   if(doPrintInfo)
    {
-      cout<<"Accruing interest for 1 month:"<<endl;
-      cout<<"  Initial balance: "<<initialBalance<<endl;
-      cout<<"  Initial rate: "<<interestRate<<endl;
-      cout<<"  Interest accrued: "<<interestAmt<<endl;
-      cout<<"  New balance: "<<balanceAmt<<endl;
+      cout << "Accruing interest for 1 month:" << endl;
+      cout << "  Initial balance: " << initialBalance << endl;
+      cout << "  Initial rate: " << interestRate << endl;
+      cout << "  Interest accrued: " << interestAmt << endl;
+      cout << "  New balance: " << balanceAmt << endl;
    }
    return true;
 }

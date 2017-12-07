@@ -4,7 +4,8 @@ using namespace std;
 
 // Default Constructor. Will properly initialize a list to be an empty list,
 // to which values can be added.
-SortedListClass::SortedListClass()
+template < class T >
+SortedListClass< T >::SortedListClass()
 {
   head = 0;
   tail = 0;
@@ -12,9 +13,10 @@ SortedListClass::SortedListClass()
 
 // Copy constructor. Will make a complete (deep) copy of the list, such that
 // one can be changed without affecting the other.
-SortedListClass::SortedListClass(const SortedListClass &rhs)
+template < class T >
+SortedListClass< T >::SortedListClass(const SortedListClass< T > &rhs)
 {
-  LinkedNodeClass* temp = rhs.head;
+  LinkedNodeClass< T >* temp = rhs.head;
   if (temp == 0)
   {
     head = 0;
@@ -22,13 +24,40 @@ SortedListClass::SortedListClass(const SortedListClass &rhs)
   }
   else
   {
-    head = new LinkedNodeClass(0, temp -> getValue(), 0);
+    head = new LinkedNodeClass< T >(0, temp -> getValue(), 0);
     // copy cTemp used for construct a new lined list
-    LinkedNodeClass* cTemp = head;
+    LinkedNodeClass< T >* cTemp = head;
     while (temp -> getNext() != 0)
     {
       temp = temp -> getNext();
-      cTemp = new LinkedNodeClass(cTemp, temp -> getValue(), 0);
+      cTemp = new LinkedNodeClass< T >(cTemp, temp -> getValue(), 0);
+      cTemp -> setBeforeAndAfterPointers();
+    }
+    tail = cTemp;
+  }
+}
+
+// Overloaded assignment operator.  Will make a complete (deep) copy of the
+// list, such that one can be changed without affecting the other.
+template < class T >
+void SortedListClass< T >::operator=(const SortedListClass< T > &rhs)
+{
+  clear();
+  LinkedNodeClass< T >* temp = rhs.head;
+  if (temp == 0)
+  {
+    head = 0;
+    tail = 0;
+  }
+  else
+  {
+    head = new LinkedNodeClass< T >(0, temp -> getValue(), 0);
+    // copy cTemp used for construct a new lined list
+    LinkedNodeClass< T >* cTemp = head;
+    while (temp -> getNext() != 0)
+    {
+      temp = temp -> getNext();
+      cTemp = new LinkedNodeClass< T >(cTemp, temp -> getValue(), 0);
       cTemp -> setBeforeAndAfterPointers();
     }
     tail = cTemp;
@@ -36,19 +65,20 @@ SortedListClass::SortedListClass(const SortedListClass &rhs)
 }
 
 // Clears the list to an empty state without resulting in any memory leaks.
-void SortedListClass::clear()
+template < class T >
+void SortedListClass< T >::clear()
 {
-  LinkedNodeClass* temp = head;
+  LinkedNodeClass< T >* temp = head;
   // cTemp is used to delete the node
   if (temp == 0)
   {
-    cout << "The list is clear" << endl;
+    //cout << "The list is clear" << endl;
   }
   else
   {
     head = 0;
     tail = 0;
-    LinkedNodeClass* cTemp;
+    LinkedNodeClass< T >* cTemp;
     while (temp != 0)
     {
       cTemp = temp;
@@ -56,7 +86,7 @@ void SortedListClass::clear()
       delete cTemp;
     }
     // At this point the temp is set to be 0
-    cout << "The list is clear" << endl;
+    // cout << "The list is clear" << endl;
   }
 }
 
@@ -67,12 +97,13 @@ void SortedListClass::clear()
 // or more node values already in the list, the newly inserted node will be
 // placed AFTER the previously inserted nodes. Input is: The value to insert
 // into the list.
-void SortedListClass::insertValue(const int &valToInsert)
+template < class T >
+void SortedListClass< T >::insertValue(const T &valToInsert)
 {
-  LinkedNodeClass* temp = head;
+  LinkedNodeClass< T >* temp = head;
   if (temp == 0)
   {
-    head = new LinkedNodeClass(0, valToInsert, 0);
+    head = new LinkedNodeClass< T >(0, valToInsert, 0);
     tail = head;
   }
   else
@@ -83,13 +114,13 @@ void SortedListClass::insertValue(const int &valToInsert)
       {
         if (temp -> getPrev() == 0)
         {
-          head = new LinkedNodeClass(0, valToInsert, temp);
+          head = new LinkedNodeClass< T >(0, valToInsert, temp);
           head -> setBeforeAndAfterPointers();
         }
         else
         {
-          LinkedNodeClass* insertNode;
-          insertNode = new LinkedNodeClass(temp -> getPrev(), valToInsert, temp);
+          LinkedNodeClass< T >* insertNode;
+          insertNode = new LinkedNodeClass< T >(temp -> getPrev(), valToInsert, temp);
           insertNode -> setBeforeAndAfterPointers();
           insertNode = 0;
         }
@@ -103,7 +134,7 @@ void SortedListClass::insertValue(const int &valToInsert)
         }
         else
         {
-          tail = new LinkedNodeClass(temp, valToInsert, 0);
+          tail = new LinkedNodeClass< T >(temp, valToInsert, 0);
           tail -> setBeforeAndAfterPointers();
           break;
         }
@@ -117,9 +148,10 @@ void SortedListClass::insertValue(const int &valToInsert)
 // with a line reading "Forward List Contents Follow:", then prints one list
 // element per line, indented two spaces, then prints the line "End Of List
 // Contents" to indicate the end of the list.
-void SortedListClass::printForward() const
+template < class T >
+void SortedListClass< T >::printForward() const
 {
-  LinkedNodeClass* temp = head;
+  LinkedNodeClass< T >* temp = head;
   cout << "Forward List Contents Follow:" << endl;
   while(temp != 0)
   {
@@ -133,9 +165,10 @@ void SortedListClass::printForward() const
 // with a line reading "Backward List Contents Follow:", then prints one
 // list element per line, indented two spaces, then prints the line "End Of
 // List Contents" to indicate the end of the list.
-void SortedListClass::printBackward() const
+template < class T >
+void SortedListClass< T >::printBackward() const
 {
-  LinkedNodeClass* temp = tail;
+  LinkedNodeClass< T >* temp = tail;
   cout << "Backward List Contents Follow:" << endl;
   while (temp != 0)
   {
@@ -151,12 +184,13 @@ void SortedListClass::printBackward() const
 // reference parameter upon return is undefined. If the list was not empty
 // and the first item was successfully removed, true is returned, and the
 // reference parameter will be set to the item that was removed.
-bool SortedListClass::removeFront(int &theVal)
+template < class T >
+bool SortedListClass< T >::removeFront(T &theVal)
 {
-  LinkedNodeClass* temp = head;
+  LinkedNodeClass< T >* temp = head;
   if (temp == 0)
   {
-    cout << "empty list, theVal is undefined" << endl;
+    //cout << "empty list, theVal is undefined" << endl;
     return false;
   }
   else
@@ -182,9 +216,10 @@ bool SortedListClass::removeFront(int &theVal)
 // reference parameter upon return is undefined. If the list was not empty
 // and the last item was successfully removed, true is returned, and the
 // reference parameter will be set to the item that was removed.
-bool SortedListClass::removeLast(int &theVal)
+template < class T >
+bool SortedListClass< T >::removeLast(T &theVal)
 {
-  LinkedNodeClass* temp = tail;
+  LinkedNodeClass< T >* temp = tail;
   if (temp == 0)
   {
     cout << "empty list, theVal is undefined" << endl;
@@ -208,10 +243,11 @@ bool SortedListClass::removeLast(int &theVal)
 }
 
 // Returns the number of nodes contained in the list.
-int SortedListClass::getNumElems() const
+template < class T >
+int SortedListClass< T >::getNumElems() const
 {
   int count = 0;
-  LinkedNodeClass* temp = head;
+  LinkedNodeClass< T >* temp = head;
   while (temp != 0)
   {
     count = count + 1;
@@ -225,9 +261,10 @@ int SortedListClass::getNumElems() const
 // unchanged and false is returned.  Otherwise, the function returns true,
 // and the reference parameter outVal will contain a copy of the value at
 // that location.
-bool SortedListClass::getElemAtIndex(const int index, int &outVal)
+template < class T >
+bool SortedListClass< T >::getElemAtIndex(const int index, T &outVal)
 {
-  LinkedNodeClass* temp = head;
+  LinkedNodeClass< T >* temp = head;
   if (index < 0)
   {
     return false;
@@ -252,5 +289,12 @@ bool SortedListClass::getElemAtIndex(const int index, int &outVal)
   outVal = temp -> getValue();
   return true;
 }
-
+// Destructor, which will free up all dynamic memory associated with this
+// list when the list is destroyed (i.e when a statically allocated list
+// goes out of scope or a dynamically allocated list is deleted).
+template < class T >
+SortedListClass< T >::~SortedListClass()
+{
+  clear();
+}
 
